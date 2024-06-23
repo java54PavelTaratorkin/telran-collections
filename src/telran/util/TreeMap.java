@@ -6,26 +6,36 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements SortedMap<K, V> 
 
 	@Override
 	public K firstKey() {
-		// TODO Auto-generated method stub
-		return null;
+		Entry<K, V> entry = ((TreeSet<Entry<K, V>>) set).first();
+		return entry == null ? null : entry.getKey();
 	}
 
 	@Override
 	public K lastKey() {
-		// TODO Auto-generated method stub
-		return null;
+		Entry<K, V> entry = ((TreeSet<Entry<K, V>>) set).last();
+		return entry == null ? null : entry.getKey();
 	}
 
 	@Override
 	public K floorKey(K key) {
-		// TODO Auto-generated method stub
-		return null;
+        K result = null;
+        Entry<K, V> pattern = new Entry<>(key, null);
+        Entry<K, V> floorEntry = ((TreeSet<Entry<K, V>>) set).floor(pattern);
+        if (floorEntry != null) {
+            result = floorEntry.getKey();
+        }
+        return result;
 	}
 
 	@Override
 	public K ceilingKey(K key) {
-		// TODO Auto-generated method stub
-		return null;
+        K result = null;
+        Entry<K, V> pattern = new Entry<>(key, null);
+        Entry<K, V> ceilingEntry = ((TreeSet<Entry<K, V>>) set).ceiling(pattern);
+        if (ceilingEntry != null) {
+            result = ceilingEntry.getKey();
+        }
+        return result;
 	}
 
 	@Override
@@ -41,3 +51,4 @@ public class TreeMap<K, V> extends AbstractMap<K, V> implements SortedMap<K, V> 
 	}
 
 }
+

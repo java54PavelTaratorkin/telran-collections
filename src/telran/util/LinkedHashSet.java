@@ -1,6 +1,7 @@
 package telran.util;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import telran.util.LinkedList.Node;
 
@@ -15,11 +16,18 @@ public class LinkedHashSet<T> extends AbstractCollection<T> implements Set<T> {
 		return node == null ? null : node.data;
 	}
 
-	@Override
-	public boolean add(T obj) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean add(T obj) {
+        boolean result = false;
+        if (!contains(obj)) {
+            Node<T> newNode = new Node<>(obj);
+            list.addNode(list.size(), newNode);
+            map.put(obj, newNode);
+            size++;
+            result = true;
+        }
+        return result;
+    }
 
 	@Override
 	public boolean remove(T pattern) {
@@ -37,14 +45,42 @@ public class LinkedHashSet<T> extends AbstractCollection<T> implements Set<T> {
 
 	@Override
 	public boolean contains(T pattern) {
-		// TODO Auto-generated method stub
-		return false;
+		return map.get(pattern) != null;
 	}
 
-	@Override
-	public Iterator<T> iterator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Iterator<T> iterator() {
+        return new LinkedHashSetIterator();
+    }
 
+    class LinkedHashSetIterator implements Iterator<T> {
+		Node<T> current = list.head;
+		Node<T> prev = null;
+    	
+		@Override
+		public boolean hasNext() {
+			return current != null;
+		}
+
+		@Override
+		public T next() {
+			if(!hasNext()) {
+				throw new NoSuchElementException();
+			}
+			prev = current;
+			current = current.next;
+			return prev.data;
+		}
+		
+		@Override
+		public void remove() {
+			if(prev == null) {
+				throw new IllegalStateException();
+			}
+			LinkedHashSet.this.remove(prev.data);
+            prev = null;
+		}
+    	
+    }
+    
 }
